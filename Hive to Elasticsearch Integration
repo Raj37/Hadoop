@@ -37,18 +37,18 @@ CREATE TABLE analytics.avast_upperlimit_duplicate2_ES2(dates string,client strin
 
 Step 4: Delete elasticSearch jar file from hive
 
-hive>delete jar /drhome/rkamal/elasticsearch-hadoop-2.4.4.jar;
+hive>delete jar /home/raj/elasticsearch-hadoop-2.4.4.jar;
 
 Step 5: Add commons-httpclient jar file in hive
 
-hive>add jar /drhome/rkamal/commons-httpclient-3.0.1.jar;
+hive>add jar /home/raj/commons-httpclient-3.0.1.jar;
 
 Step 6: Set some property in hive
 
 hive>list jars;
 Note:  Only commons-httpclient-3.0.1.jar should be present in hive session.
 
-hive>SET EXPORT HADOOP_CLASSPATH="/drhome/rkamal/elasticsearch-hadoop-2.4.4.jar";
+hive>SET EXPORT HADOOP_CLASSPATH="/home/raj/elasticsearch-hadoop-2.4.4.jar";
 
 hive>set hive.execution.engine=tez;
 
