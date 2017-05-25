@@ -1,31 +1,31 @@
-Step 1: Hive table in systest env
+Step 1: Hive table in dev/test/prod env
 
-table_name: avast_upperlimit_duplicate2
+table_name: hive_tbl
 
 Hive table schema:
 
-hive> desc avast_upperlimit_duplicate2;
+hive> desc hive_tbl;
 OK
 dates                   string
 client                  string
-median_demand_order_cnt double
-upperlimit_doc          double
+median_cnt              double
+upper_limit             double
 mytimestamp             timestamp
 
 Hive table data:
 
-hive> select * from avast_upperlimit_duplicate2 limit 10;
+hive> select * from hive_tbl limit 10;
 OK
-2017-03-31      AVAST Software  27144.0 24353.88936174829       2017-03-31 00:00:00
-2017-03-30      AVAST Software  27645.0 24353.88936174829       2017-03-30 00:00:00
-2017-03-08      AVAST Software  27944.0 24353.88936174829       2017-03-08 00:00:00
-2017-03-03      AVAST Software  28255.0 24353.88936174829       2017-03-03 00:00:00
-2017-03-14      AVAST Software  28644.0 24353.88936174829       2017-03-14 00:00:00
-2017-03-28      AVAST Software  28686.0 24353.88936174829       2017-03-28 00:00:00
-2017-03-02      AVAST Software  28876.0 24353.88936174829       2017-03-02 00:00:00
-2017-03-01      AVAST Software  28937.0 24353.88936174829       2017-03-01 00:00:00
-2017-03-11      AVAST Software  28946.0 24353.88936174829       2017-03-11 00:00:00
-2017-03-09      AVAST Software  29052.0 24353.88936174829       2017-03-09 00:00:00
+2017-03-31      AVAST   27144.0 24353.88936174829       2017-03-31 00:00:00
+2017-03-30      AVAST   27645.0 24353.88936174829       2017-03-30 00:00:00
+2017-03-08      AVAST   27944.0 24353.88936174829       2017-03-08 00:00:00
+2017-03-03      AVAST   28255.0 24353.88936174829       2017-03-03 00:00:00
+2017-03-14      AVAST   28644.0 24353.88936174829       2017-03-14 00:00:00
+2017-03-28      AVAST   28686.0 24353.88936174829       2017-03-28 00:00:00
+2017-03-02      AVAST   28876.0 24353.88936174829       2017-03-02 00:00:00
+2017-03-01      AVAST   28937.0 24353.88936174829       2017-03-01 00:00:00
+2017-03-11      AVAST   28946.0 24353.88936174829       2017-03-11 00:00:00
+2017-03-09      AVAST   29052.0 24353.88936174829       2017-03-09 00:00:00
 
 Step 2: Adding elasticsearch jar in hive
 
@@ -33,7 +33,7 @@ hive>ADD jar /drhome/rkamal/elasticsearch-hadoop-2.4.4.jar;
 
 Step 3: Creating table in hive for elasticsearch
 
-CREATE TABLE analytics.avast_upperlimit_duplicate2_ES2(dates string,client string,median_demand_order_cnt double,upperlimit_doc double,mytimestamp timestamp)STORED BY 'org.elasticsearch.hadoop.hive.EsStorageHandler' TBLPROPERTIES('es.resource' = 'avast_upperlimit_duplicate3/event','es.index.auto.create' = 'true','es.nodes'='aqucassys031002.c031.digitalriverws.net','es.port'='9200','es.field.read.empty.as.null' ='true','es.mapping.names' = 'TimeTaken:TimeTaken');
+CREATE TABLE db.hive_tbl_ES(dates string,client string,median_cnt double,upper_limit double,mytimestamp timestamp)STORED BY 'org.elasticsearch.hadoop.hive.EsStorageHandler' TBLPROPERTIES('es.resource' = 'avast-upperlimit/event','es.index.auto.create' = 'true','es.nodes'='elasticsearch_hostname','es.port'='9200','es.field.read.empty.as.null' ='true','es.mapping.names' = 'TimeTaken:TimeTaken');
 
 Step 4: Delete elasticSearch jar file from hive
 
@@ -56,7 +56,7 @@ hive>set TezConfiguration.TEZ_CONTAINER_MAX_JAVA_HEAP_FRACTION=8;
 
 Step 7: Load data into elasticSearch
 
-hive>INSERT OVERWRITE TABLE analytics.avast_upperlimit_duplicate2_ES2 SELECT * FROM analytics.avast_upperlimit_duplicate2;
+hive>INSERT OVERWRITE TABLE db.hive_tbl_ES SELECT * FROM db.hive_tbl;
 
 Step 8: Create dashboard in kibana
 
